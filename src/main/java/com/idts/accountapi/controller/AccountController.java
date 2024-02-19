@@ -7,6 +7,7 @@ import com.idts.accountapi.model.Account;
 import com.idts.accountapi.model.User;
 import com.idts.accountapi.model.assembler.AccountModelAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +38,10 @@ public class AccountController {
             account.setUser(user.get());
             account.setAccountName(accountName);
 
-
             EntityModel<Account> accountEntityModel = accountModelAssembler.toModel(accountRepository.save(account));
-            //Todo craft a better response with an Entity model
-            return new ResponseEntity<>("Account created and associated to user", HttpStatus.CREATED);
+            return ResponseEntity.created(accountEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(accountEntityModel);
         } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("The account could not be created because the user was not found", HttpStatus.NOT_FOUND);
         }
     }
 

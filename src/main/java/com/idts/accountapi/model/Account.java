@@ -70,20 +70,4 @@ public class Account {
                 ", accountName='" + this.accountName + '\'' +
                 ", user='" + this.user + '\'' + '}';
     }
-
-    //    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    private String accountNumber;
-//
-//    private String accountName;
-//
-//    @Column(columnDefinition = "DECIMAL(10,2) default 0.0")
-//    private Double balance;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    @JsonIgnore
-//    private User user;
 }
