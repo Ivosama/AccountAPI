@@ -83,9 +83,9 @@ public class AccountController {
         if(amount > fromAccount.getBalance()) {
             throw new NotEnoughFundsInAccountException(fromAccount);
         } else {
-            accountUtils.substractFromAccount(fromAccount, amount);
+            fromAccount.setBalance(accountUtils.substractFromAccount(fromAccount, amount));
             accountRepository.save(fromAccount);
-            accountUtils.addToAccount(toAccount, amount);
+            toAccount.setBalance(accountUtils.addToAccount(toAccount, amount));
             accountRepository.save(toAccount);
 
             //TODO update if I manage to create a TransactionHistory table
