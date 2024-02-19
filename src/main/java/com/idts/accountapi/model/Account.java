@@ -2,10 +2,7 @@ package com.idts.accountapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.ColumnDefault;
@@ -18,7 +15,6 @@ import java.util.Objects;
 @Setter
 @Accessors(chain = true)
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = "accountName")
 })
@@ -46,6 +42,10 @@ public class Account {
 
     public void setAccountName(String accountName) {
         this.accountName = this.getUser().getId() + "-" + accountName;
+    }
+
+    public Account() {
+        this.balance = 0.0;
     }
 
     @Override
