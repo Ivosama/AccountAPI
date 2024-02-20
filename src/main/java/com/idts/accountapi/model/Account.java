@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -33,19 +34,19 @@ public class Account {
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)", insertable = false)
     @ColumnDefault("0.0")
-    private Double balance;
+    private BigDecimal balance;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
-    public void setAccountName(String accountName) {
-        this.accountName = this.getUser().getId() + "-" + accountName;
+    public void updateBalance(BigDecimal newBalance) {
+        this.balance = newBalance;
     }
 
     public Account() {
-        this.balance = 0.0;
+        this.balance = BigDecimal.valueOf(0.0);
     }
 
     @Override

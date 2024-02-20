@@ -5,6 +5,8 @@ import com.idts.accountapi.dao.AccountRepository;
 import com.idts.accountapi.model.Account;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class AccountUtils {
     private final AccountRepository accountRepository;
@@ -18,18 +20,19 @@ public class AccountUtils {
     }
 
     public Account validateAccount(Account account) {
-        Long accountId = account.getId();
-        account = accountRepository.findById(account.getId())
-                        .orElseThrow(() -> new AccountNotFoundException(accountId));
-
-        return account;
+        return validateAccountById(account.getId());
     }
 
-    public Double substractFromAccount(Account account, double amount) {
-        return account.getBalance() - amount;
+    public Account validateAccountById(Long accountId) {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException(accountId));
     }
 
-    public Double addToAccount(Account account, double amount) {
-        return account.getBalance() + amount;
+    public BigDecimal substractFromAccount(Account account, BigDecimal amount) {
+        return account.getBalance().subtract(amount);
+    }
+
+    public BigDecimal addToAccount(Account account, BigDecimal amount) {
+        return account.getBalance().add(amount);
     }
 }

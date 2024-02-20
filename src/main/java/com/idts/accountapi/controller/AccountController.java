@@ -1,13 +1,11 @@
 package com.idts.accountapi.controller;
 
 import com.idts.accountapi.customHandler.AccountNotFoundException;
-import com.idts.accountapi.customHandler.NotEnoughFundsInAccountException;
 import com.idts.accountapi.dao.AccountRepository;
 import com.idts.accountapi.dao.UserRepository;
 import com.idts.accountapi.model.Account;
 import com.idts.accountapi.model.User;
 import com.idts.accountapi.model.assembler.AccountModelAssembler;
-import com.idts.accountapi.utils.AccountUtils;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
@@ -24,14 +22,12 @@ public class AccountController {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final AccountModelAssembler accountModelAssembler;
-    private final AccountUtils accountUtils;
 
     public AccountController(AccountRepository accountRepository, AccountModelAssembler accountModelAssembler,
-                             UserRepository userRepository, AccountUtils accountUtils) {
+                             UserRepository userRepository) {
         this.accountRepository = accountRepository;
         this.accountModelAssembler = accountModelAssembler;
         this.userRepository = userRepository;
-        this.accountUtils = accountUtils;
     }
 
     @PostMapping("/newAccount/{username}/{accountName}")
@@ -71,25 +67,5 @@ public class AccountController {
         return accountRepository.findByUser(user).stream()
                 .map(accountModelAssembler::toModel)
                 .collect(Collectors.toList());
-    }
-
-    @GetMapping("/transferFunds/{amount}/{fromAccount}/{toAccount}")
-    public ResponseEntity<?> transferFunds(@PathVariable Account fromAccount,
-                                           @PathVariable Account toAccount,
-                                           @PathVariable Double amount) {
-        fromAccount = accountUtils.validateAccount(fromAccount);
-        toAccount = accountUtils.validateAccount(toAccount);
-
-        if(amount > fromAccount.getBalance()) {
-            throw new NotEnoughFundsInAccountException(fromAccount);
-        } else {
-            fromAccount.setBalance(accountUtils.substractFromAccount(fromAccount, amount));
-            accountRepository.save(fromAccount);
-            toAccount.setBalance(accountUtils.addToAccount(toAccount, amount));
-            accountRepository.save(toAccount);
-
-            //TODO update if I manage to create a TransactionHistory table
-            return new ResponseEntity<>("The amount was transferred ", HttpStatus.ACCEPTED);
-        }
     }
 }
