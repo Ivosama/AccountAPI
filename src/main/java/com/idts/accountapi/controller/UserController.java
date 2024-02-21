@@ -35,12 +35,18 @@ public class UserController {
         return CollectionModel.of(users, linkTo(methodOn(UserController.class).getAll()).withSelfRel());
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable Long userId) {
+    @GetMapping("getById/{userId}")
+    public ResponseEntity<User> getById(@PathVariable Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         return user != null
                 ? ResponseEntity.ok(user)
                 : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("getByUsername/{username}")
+    public ResponseEntity<User> getByUsername(@PathVariable String username) {
+        User user = userRepository.findByUsername(username);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping

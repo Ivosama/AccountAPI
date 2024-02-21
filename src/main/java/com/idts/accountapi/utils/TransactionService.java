@@ -7,6 +7,7 @@ import com.idts.accountapi.model.Transaction;
 import com.idts.accountapi.model.assembler.TransactionModelAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -41,9 +42,10 @@ public class TransactionService {
 
         Transaction transaction = new Transaction(fromAccount, toAccount, amount);
         transactionRepository.save(transaction);
-        return transactionModelAssembler.toModel(transaction);
+        return transactionModelAssembler.toModelForTransferOfFunds(transaction);
     }
 
+    @Transactional
     public EntityModel<Transaction> createTransaction(Long toAccountId, BigDecimal amount) {
         Account toAccount = accountUtils.validateAccountById(toAccountId);
 

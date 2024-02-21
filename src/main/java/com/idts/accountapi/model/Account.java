@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -41,6 +42,7 @@ public class Account {
     @JsonIgnore
     private User user;
 
+    @Transactional
     public void updateBalance(BigDecimal newBalance) {
         this.balance = newBalance;
     }

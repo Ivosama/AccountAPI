@@ -8,6 +8,5 @@ import org.springframework.stereotype.Component;
 @Component
 @NonNullApi
 public interface UserRepository extends JpaRepository<User, Long> {
-    //Todo could add queries
     User findByUsername(String username);
 }
