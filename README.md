@@ -55,3 +55,30 @@ A brief section on monitoring the application in production can include the foll
 4. **Alerting:** Alerts can notify administrators or operations teams of potential issues, allowing for proactive responses.
 
 5. **Daily image creation and deployment of long-lived branches:** Setting up a jenkins pipeline that builds images of the main branches and uploads them to nexus, would allow for further monitoring. This can be done by deploying different docker environments where the pods can be monitored.
+
+## How to use the api
+
+The database in being populated from the 'LoadDatabase' class. It currently has 4 users created. This means that the system can be tested from http://localhost:8080/swagger-ui/index.html by using CRU operations (Delete operations were not implemented).
+
+Example 1 - Using the api:
+1. Download the repository and open it as from intelliJ.
+2. Run the AccountApiApplication
+3. Access http://localhost:8080/swagger-ui/index.html 
+4. Choose the GET operation /api/users/getAll
+5. Press 'Try it out' - Execute
+6. See all the registered users.
+
+Example 2 - Testing creating accounts:
+1. Follow steps 1-3
+2. Choose the POST operation /api/accounts/newAccount
+   2.1. Write "Poul" or any of the other users in the username field
+   2.2. Write an account name that that follows the regex pattern: [a-zA-Z0-9]
+   2.3. Execute
+3. Go the GET operation /api/accounts/getAllAccounts or /api/accounts/getAllAccountsOnUser
+4. See that the account(s) you created were saved
+
+Example 3 - Testing adding funds to an account
+1. If you are still in the same session as "Example 2", then you can simply go to /api/transactions/addFunds
+2. Fill out the 'toAccountId' field with the id of an account created in Example 2.
+3. Fill out the 'amountToTransfer' field with a numeric value, f.x. 100.
+4. Alternatively to step 2, you can input an invalid accountId and see the custom error.
